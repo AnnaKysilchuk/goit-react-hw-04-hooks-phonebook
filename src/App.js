@@ -1,75 +1,53 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import style from './App.module.css';
 import { InputForm } from './components/inputForm/InputForm.jsx';
 import { FilterForm } from './components/filterForm/FilterForm.jsx';
 import { ContactsList } from './components/contactsList/ContactsList.jsx';
 import * as localStorage from './services/localStorage';
 
-class App extends Component {
-    state = {
-        contacts: [
-            { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-            { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-            { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-            { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-        ],
-        filter: '',
-    };
+const CONTACTS_KEY = 'contacts';
 
-    componentDidMount() {
-        const savedContacts = localStorage.get('contacts');
-        if (savedContacts) {
-            this.setState({ contacts: savedContacts });
-        }
-    }
+const App = () => {
+    const [contacts, setContacts] = useState(localStorage.get(CONTACTS_KEY));
+    const [filter, setFilter] = useState('');
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.contacts !== this.state.contacts) {
-            localStorage.save('contacts', this.state.contacts);
-        }
-    }
+    useEffect(() => {
+        localStorage.save(CONTACTS_KEY, contacts);
+    }, [contacts]);
 
-    onAddContact = contact => {
-        if (this.state.contacts.flatMap(contact => contact.name).includes(contact.name)) {
+    const onAddContact = contact => {
+        if (contacts.flatMap(contact => contact.name).includes(contact.name)) {
             alert(`${contact.name} is already in your contacts.`);
             return;
         }
-
-        this.setState(prevState => ({
-            contacts: [contact, ...prevState.contacts],
-        }));
+        setContacts(prevState => {
+            return [contact, ...prevState];
+        });
     };
 
-    onFilterInput = event => {
-        this.setState({ filter: event.currentTarget.value });
+    const onFilterInput = event => {
+        setFilter(event.currentTarget.value);
     };
 
-    getFilterContacts = () => {
-        return this.state.contacts.filter(contact =>
-            contact.name.toLowerCase().includes(this.state.filter.toLowerCase()),
+    const getFilterContacts = () => {
+        return contacts.filter(contact =>
+            contact.name.toLowerCase().includes(filter.toLowerCase()),
         );
     };
 
-    onDeleteContact = contactId => {
-        this.setState(prevState => ({
-            contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-        }));
+    const onDeleteContact = contactId => {
+        setContacts(prevState => prevState.filter(contact => contact.id !== contactId));
     };
 
-    render() {
-        return (
-            <div>
-                <h2 className={style.title}>Phonebook</h2>
-                <InputForm onSubmit={this.onAddContact} />
-                <h2 className={style.title}>Contacts</h2>
-                <FilterForm value={this.state.filter} onChange={this.onFilterInput} />
-                <ContactsList
-                    contacts={this.getFilterContacts()}
-                    deleteBtn={this.onDeleteContact}
-                />
-            </div>
-        );
-    }
-}
+    return (
+        <div>
+            <h2 className={style.title}>Phonebook</h2>
+            <InputForm onSubmit={onAddContact} />
+            <h2 className={style.title}>Contacts</h2>
+            <FilterForm value={filter} onChange={onFilterInput} />
+            <ContactsList contacts={getFilterContacts()} deleteBtn={onDeleteContact} />
+        </div>
+    );
+};
 
 export default App;
