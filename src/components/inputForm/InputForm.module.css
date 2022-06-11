@@ -1,0 +1,44 @@
+.inputForm {
+    width: 450px;
+    padding: 20px 10px;
+    border: solid 2px black;
+}
+
+.label {
+    display: block;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.inputArea {
+    padding: 2px 4px;
+    font-size: 16px;
+    border: 1px solid #bdbdbd;
+    border-radius: 0.25rem;
+}
+
+.inputArea:hover,
+.inputArea:focus {
+    border-color: #5999ff;
+    outline: 0;
+    box-shadow: 0px 1px 3px 4px rgba(89, 153, 255, 0.12), 0px 1px 2px rgba(89, 153, 255, 0.14),
+        0px 2px 1px rgba(89, 153, 255, 0.2);
+}
+
+.addContactBtn {
+    font-size: 14px;
+    width: 120px;
+    height: 25px;
+    border-radius: 2px;
+    border: none;
+    box-shadow: 0px 1px 3px 2px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+        0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.addContactBtn:hover,
+.addContactBtn:focus {
+    background-color: #d9d9d9;
+    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.14),
+        0px 1px rgba(0, 0, 0, 0.2);
+}
